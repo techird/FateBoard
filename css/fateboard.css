@@ -121,14 +121,8 @@ div.author a {
     position: relative;
     background-position-x: 0; 
 }
-.board-cell.left.top{
-    background-position-x: -40px;
-}
 .board-cell.top{
     background-position-x: -80px;
-}
-.board-cell.right.top{
-    background-position-x: -120px;
 }
 .board-cell.left{
     background-position-x: -160px;
@@ -136,14 +130,26 @@ div.author a {
 .board-cell.right{
     background-position-x: -200px;
 }
-.board-cell.left.bottom{
-    background-position-x: -240px;
-}
 .board-cell.bottom{
     background-position-x: -280px;
 }
 .board-cell.right.bottom{
     background-position-x: -320px;
+}
+.board-cell.left.bottom{
+    background-position-x: -240px;
+}
+.board-cell.left.top{
+    background-position-x: -40px;
+}
+.board-cell.right.top{
+    background-position-x: -120px;
+}
+.board-cell.left.right{
+    background-position-x: -360px;
+}
+.board-cell.top.bottom{
+    background-position-x: -400px;
 }
 .board-cell.cell-type-0{
     background-position-y: -80px;

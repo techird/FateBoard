@@ -7,19 +7,35 @@ function Board(  ) {
         }
         var map_data = {};
         var TYPE_NAME = Map.TYPE_NAME = [ 'Road', 'Techird', 'Sue', '+7', '-5', '*3', '/2', 'Wall' ];
+        var me = this;
         this.setCell = function( x, y, type ) {
-            function updateDomClass( $dom, x, y, type ) {
-                baidu.forEach('left,right,top,bottom'.split(','), function(className) {
-                    $dom.removeClass(className);
-                });
-                if(x == 0) 
+            function updateDomClass( x, y, $dom, type, affect_cell ) {
+                if( $dom == undefined ) {
+                    var cell = me.getCell( x, y );
+                    if ( cell == undefined ) return;
+                    $dom = cell.dom;
+                    type = cell.type;
+                }
+                $dom.removeClass('left')
+                    .removeClass('right')
+                    .removeClass('top')
+                    .removeClass('bottom');
+                
+                if( x == 0 || me.getCellTypeName( x - 1, y ) == 'Wall' ) 
                     $dom.addClass('left');
-                if(x == width - 1) 
-                    $dom.addClass('right');
-                if(y == 0) 
+                if( y == 0 || me.getCellTypeName( x, y - 1 ) == 'Wall' ) 
                     $dom.addClass('top');
-                if(y == height - 1) 
+                if( x == width - 1 || me.getCellTypeName( x + 1, y ) == 'Wall' ) 
+                    $dom.addClass('right');
+                if( y == height - 1 || me.getCellTypeName( x, y + 1 ) == 'Wall' ) 
                     $dom.addClass('bottom');
+
+                if( affect_cell == undefined ) {
+                    if( x > 0 ) updateDomClass( x - 1, y, undefined, undefined, true );
+                    if( y > 0 ) updateDomClass( x, y - 1, undefined, undefined, true );
+                    if( x < width ) updateDomClass( x + 1, y, undefined, undefined, true );
+                    if( y < height ) updateDomClass( x, y + 1, undefined, undefined, true );
+                }
             }
             function addCell( x, y, type ) {
                 var $dom = baidu('<td>');
@@ -27,7 +43,7 @@ function Board(  ) {
                     .addClass('cell-type-' + type)
                     .attr('x', x)
                     .attr('y', y);
-                updateDomClass( $dom, x, y, type );                
+                updateDomClass( x, y, $dom, type );                
                 return map_data[hash(x,y)] = {
                     type: type,
                     dom: $dom
@@ -37,7 +53,7 @@ function Board(  ) {
                 var data = map_data[hash(x, y)];
                 data.dom.removeClass('cell-type-' + data.type).addClass('cell-type-' + type);
                 data.type = type;
-                updateDomClass( data.dom, x, y, type );
+                updateDomClass( x, y, data.dom, type );
                 return data;
             }
             return this.getCell( x, y ) ? changeCell( x, y, type ) : addCell( x, y, type );
